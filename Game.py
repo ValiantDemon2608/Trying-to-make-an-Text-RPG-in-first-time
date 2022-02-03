@@ -1,9 +1,19 @@
+#https://github.com/Textualize/rich
 import random as r
 
-count = 0
+
+countW = 0
+countR = 0
+countB = 0
 hp = 0
 coins = 0
 damage = 0
+goalW = 0
+goalR = 0
+goalB = 0
+Fail = 0
+oneHpCost = 5
+threeHpCost = 12
 
 def printParameters():
     print("У тебя {0} жизней, {1} урона и {2} монет.".format(hp, damage, coins))
@@ -21,6 +31,7 @@ def meetShop():
     global hp
     global damage
     global coins
+    global oneHpCost
 
     def buy(cost):
         global coins
@@ -38,10 +49,7 @@ def meetShop():
     weaponRarity = weaponRarities[weaponLvl - 1]
     weaponCost = r.randint(3, 10) * weaponLvl
     weapon = r.choice(weapons)
-
-    oneHpCost = 5
-    threeHpCost = 12
-
+    
     print("На пути тебе встретился торговец!")
     printParameters()
     
@@ -69,12 +77,13 @@ def meetShop():
 def meetMonster():
     global hp
     global coins
+    global countW
+    global Fail 
 
     monsterLvl = r.randint(1, 3)
     monsterHp = monsterLvl
     monsterDmg = monsterLvl * 2 - 1
     monsters = ["Таракан", "Клоп", "Сын маминой подруги", "Нищий", "Демон"]
-
     monster = r.choice(monsters)
 
     print("Ты набрел на монстра - {0}, у него {1} уровень, {2} жизней и {3} урона.".format(monster, monsterLvl, monsterHp, monsterDmg))
@@ -93,6 +102,7 @@ def meetMonster():
                 break
             else:
                 print("Монстр оказался чересчур сильным и догнал тебя...")
+                Fail += 1
         else:
             continue
 
@@ -106,27 +116,58 @@ def meetMonster():
         loot = r.randint(0, 2) + monsterLvl
         coins += loot
         print("Тебе удалось одолеть монстра, за что ты получил", loot, "монет.")
+        countW += 1
         printCoins()
 
 def Robert():
     global hp
     global damage
     global coins
-    input("Ты встретил своего давнего друга Роберта! Хочешь поболтать с ним? (да/нет): ").lower() == "да"
-    input("Приветствую тебя Друг, не серчай если попрошу у тебя об одной просьбе? (да/нет): ").lower() == "да"
-    quest = r.randint(1,4)
+    global goalW
+    global countW
+
+    choice = input ("Ты встретил своего давнего друга Роберта! Хочешь поболтать с ним? (да/нет): ").lower() == "да"
+    choice = input ("Приветствую тебя Друг, не серчай если попрошу у тебя об одной просьбе? (да/нет): ").lower() == "да"
+    quest = r.randint(1,2)
     if quest == 1:
-        print("Мне тут на днях доставили много трудностей Клопы. Сможешь их убить для меня? (да/нет): ").lower() == "да"
-    elif quest == 2:
-        print("Мне тут на днях доставили много трудностей Тараканы. Сможешь их убить для меня? (да/нет): ").lower() == "да"
-    elif quest == 3:
-        print("Мне тут на днях доставили много трудностей Клопы. Сможешь их убить для меня? (да/нет): ").lower() == "да"
+        choice = input("Мне тут на днях доставили много трудностей монстры,cможешь убить для меня парочку? (да/нет): ").lower() == "да"
+        goalW = r.randint(1,5)
     else:
         print("Я передумал!")
     printParameters()
+
+    def QuestComplete():
+        global goal
+        global count
+        global coins
+
+        if countW == goalW:
+            print("Спасибо брат, это тебе!")
+            coins += r.randint(1,10)
+            
+
+def Achivement():
+    global goal
+    global countW
+    global coins 
+    global hp
+    
+    if countW == 10:
+        print("Достижение Воин открыто")
+        print("Описание: Победить 10 монстров")
+        print("Награда: 10 монет!")
+        coins += 10
+    elif countR == 10:
+        print("Достижение Воин открыто")
+        print("Описание: Убежать от монстра 10 раз")
+        print("Награда: 10 Hp!")
+        hp += 10
+    elif Fail == 1:
+        print("Epic Fail")
+        
     
     
-def initGame(initHp, initCoins, initDamage, initCount):
+def initGame(initHp, initCoins, initDamage,):
     global hp
     global coins
     global damage
@@ -134,7 +175,6 @@ def initGame(initHp, initCoins, initDamage, initCount):
     hp = initHp
     coins = initCoins
     damage = initDamage
-    count = initCount
 
     print("Ты отправился в странствие навстречу приключениям и опасностям. Удачного путешествия!")
     printParameters()

@@ -83,7 +83,7 @@ def meetMonster():
     monsterLvl = r.randint(1, 3)
     monsterHp = monsterLvl
     monsterDmg = monsterLvl * 2 - 1
-    monsters = ["Таракан", "Клоп", "Сын маминой подруги", "Нищий", "Демон"]
+    monsters = ["Таракан", "Клоп", "Нищий", "Демон", "Нежить", "Бандит", "Собака"]
     monster = r.choice(monsters)
 
     print("Ты набрел на монстра - {0}, у него {1} уровень, {2} жизней и {3} урона.".format(monster, monsterLvl, monsterHp, monsterDmg))
